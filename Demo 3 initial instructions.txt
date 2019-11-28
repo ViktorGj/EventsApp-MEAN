@@ -132,7 +132,7 @@ ADITIONAL TASKS (improvements)
     - write error into service during login / register call
     - then subscribe to get the error message in whichever components
 
-5. CREATE A NEW EVENT
+5/6. CREATE A NEW EVENT
     - in ngApp create component create-event (with title, description and date input)
     - specify route for it (special/create)
     - in backend create model event (specify new collection named events)
@@ -142,4 +142,7 @@ ADITIONAL TASKS (improvements)
     - make post call (api/special/create), using save()
     - make delete call (api/special/delete/:eventId), using findById() and remove() 
     - make update call (api/special/update), get new object from req.body, and use findOneAndUpdate({id: newEvent.id}...)
+
+7. EVENTS CREATED BY SPECIFIC USER
+
 
