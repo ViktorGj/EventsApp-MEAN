@@ -1,0 +1,20 @@
+<div class="mt-4">
+    <button class="btn btn-primary" routerLink='create' routerLinkActive="active">Create Event</button>
+    <div class="row mt-5">
+        <div class="col-md-4 mb-3" *ngFor="let event of specialEvents">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{{event.title}}</h5>
+                    <p class="card-text">{{event.description}}</p>
+                    <div>
+                        <button class="btn btn-success" [routerLink]="['edit', event._id]" routerLinkActive="active">Edit Event</button>
+                        <button class="btn btn-danger" (click)="deleteEvent(event._id)">Delete Event</button>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    {{event.date | date: 'mediumDate'}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

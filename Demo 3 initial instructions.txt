@@ -1,0 +1,145 @@
+
+1. Install NodeJs and Angular
+2. Create server folder, and in the folder path run command: npm init --yes (creates package.json file)
+3. Install dependencies (express and body-parser): npm i express body-parser --save 
+(express is web server, body-parser is middleware that handles form data like user registration or login)
+4. In server folder create server.js file
+. . .
+*npm i nodemon --save (automaticly builds the server, when you make update, without calling: node server)
+(call the comand: nodemon server)
+
+5. Create a data base on mLab / mongo (mlab.com) instead of the local machine
+    - Free: create database with name: eventsdb (Clusters > Collections > Create Database)
+    - create collection with name: users (collections are found under: Clusters > Collections)
+    - Create a database user - go to Database Access - Create... - name: userviktor, pass: autogenerate secured password
+
+6. Mongoose - whenever user makes request to server (get, post, put, delete), 
+the server needs to interact with mongoDb to perform the operation
+For this interaction is used Mongoose. It is an npm package that provides mongoDb object mapping. 
+(translating data in database to javascript object for use in our application)
+There are alternatives such as: mongoJs, native mongo client etc.
+    - Install in cmd (path: server folder): npm i --save mongoose
+    - also install mongodb: npm i mongodb --save
+Because data in mongoDb is stored as javascript object we need to create blueprint/schema of that object:
+    - Create models folder in server folder, and create a file named user.js
+    ...
+
+7. Testing api/register
+    - download postman
+    - change call to POST
+    - in Headers tab: key: content-type, value: application/json
+    - in Body tab: select raw, in the content post some test data:
+        {
+            'email' : 'viktor@mail.com',
+            'password' : '123'
+        }
+
+
+8. Create Angular APP - ngApp
+    - create components and routing
+    - nav bar
+    - registration UI and service
+    - login UI and service
+    - Develop events UI and service
+    - Login / Logout UI logic
+
+    8.1 ng new ngApp --routing
+
+    8.2 Before posting a user install CORS: npm i --save cors
+     - cors is package that allows communication between different ports such as    
+        our frontend on port 4200 with backend on port 3000. 
+        It also allows different methods (get, post, put, delete) and other settings
+    - after istalling cors, include it in server.js: app.use...
+
+
+APP REQUIREMENTS:
+    1. User registers
+    2. User logs in
+    3. User logout
+
+    INSTRUCTIONS
+    - JSON Web Tokens (JWT) - safe way to represent a set of info between two parties.
+        * header.payload.signature - xxxxx.yyyyy.zzzzz
+            - header typically consists of 2 components: type of token (JWT) and hashing algorithm
+            - payload - the data that is stored in the token
+            - signature - used to verify the token
+            more on: jwt.io
+        * using: jsonwebtoken npm package
+        * generating JWT: jwt.sign(payload, secretOrPrivateKey, [options, callback])
+        * verifying JWT: jwt.verify(token, secretOrPrivateKey, [options, callback])
+    
+    1. Generate JWT in the backend
+        - in server folder: npm i jsonwebtoken --save
+        - than in api.js require the package...
+        ...
+        - set generated token to local storage
+        - generate guard: ng g guard auth
+        - add route guard to allow certain users to access pages
+
+        - Send token from browser to server via angular's http interceptor:
+            * create token-interceptor service: ng g s token-interceptor
+            * in it create intercept method that returns cloned request (tokenizedReq)
+            * register the service in app.module:
+                - import HTTP_INTERCEPTORS
+                - import TokenInterceptorService
+                - add the service in providers[] as object: { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }
+            * test: open events and in console open application, then open the api request, in the headers should be: Authorization: Bearer xxx.yyy.zzz (token)
+            * set the actual token:
+                - in auth.service create method getToken() that returns the token
+                - inject AuthService in TokenInterceptorService (slightly different):
+                    * import Injectable, Injector from @angular/core
+                    * inject Injector in constructor
+                    * in intercept method: const authService = this.injector.get(AuthService)
+                    ...
+        - Middleware to Verify token (function called before user defined handler gets executed) - for /special route   
+            * create verifyToken() in api.js
+            * include it in /special GET method
+
+        - Handle the validation in frontend - special-events.ts
+
+        - Conclusion: now we have middleware validation (verifyToken in api.js), and frontend validation via auth guard
+        To check if middleware validation works comment the auth guard in app.routes > special events
+
+
+ADITIONAL TASKS (improvements)
+    1. Encrypt the password
+    2. Do not return the password
+    3. Improve registration (check if mail already exists)
+    4. Add error handling
+    5. Create a new events
+    6. Fetch events from database
+    7. Events created by a specific user
+
+1. ENCRYPT THE PASSWORD
+    There're various method for password encryption, one of which is BCRYPT
+    Its advantages are:
+        - adding complexity level (optimal time for encryption, but also complex enought not to be found by brute force)
+        - uniqueness
+        - no decryption needed to compare data validity
+
+    * First install bcrypt and include it in server.js (npm i bcryptjs --save)
+    * Implement hashing in login POST, and comparing hashed data with requested data (password) in register POST
+
+2. DO NOT RETURN THE PASSWORD (or any sensitive data)
+    - in api.js (/login, /register), only return the token (optionally plus the email, and other non sensitive data)
+
+3. IMPROVE REGISTRATION (check if mail already exists)
+    - use findOne() method to check if mail exists in Db
+    - move save user logic to separate file user-service.js, and require in api.js
+
+4. ERROR HANDLING
+    - make error-handler.service that writes errors (behavior subject)
+    - write error into service during login / register call
+    - then subscribe to get the error message in whichever components
+
+5. CREATE A NEW EVENT
+    - in ngApp create component create-event (with title, description and date input)
+    - specify route for it (special/create)
+    - in backend create model event (specify new collection named events)
+    - create route events
+    - make get call (api/special) and return special events from db, then load them in ngApp
+    - make get call (api/special/:eventId), using findById()
+    - make post call (api/special/create), using save()
+    - make delete call (api/special/delete/:eventId), using findById() and remove() 
+    - make update call (api/special/update), get new object from req.body, and use findOneAndUpdate({id: newEvent.id}...)
+

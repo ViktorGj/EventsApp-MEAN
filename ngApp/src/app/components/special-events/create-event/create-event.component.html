@@ -1,0 +1,22 @@
+<div class="container-fluid mt-4">
+    <h5>Create Event</h5>
+    <form [formGroup]="eventForm" class="mt-4">
+        <div class="form-group">
+            <label>Title</label>
+            <input formControlName="title" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea formControlName="description" rows="2" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Date</label>
+            <input formControlName="date" type="date" class="form-control">
+        </div>
+        <div>
+            <button type="button" class="btn btn-secondary ml-3" routerLink="/special" routerLinkActive="active">Back</button>
+            <button *ngIf="!!editState" type="submit" class="btn btn-primary ml-3" (click)="updateEvent()">Update</button>
+            <button *ngIf="!editState" type="submit" class="btn btn-primary ml-3" (click)="saveEvent()">Save</button>
+        </div>
+    </form>
+</div>
