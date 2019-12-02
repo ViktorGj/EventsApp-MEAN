@@ -37,7 +37,7 @@ module.exports = {
         if (!payload) {
             return res.status(401).send('Unauthorized request')
         }
-        // If all conditions pass we set the req.userId with payload.subject
+        // If all conditions pass we set the req.userId with payload.subject (because payload = {subject: userId)
         req.userId = payload.subject
         next()
         // then use it in special events route (verify token in function parameters...)

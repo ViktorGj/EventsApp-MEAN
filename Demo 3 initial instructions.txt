@@ -143,6 +143,9 @@ ADITIONAL TASKS (improvements)
     - make delete call (api/special/delete/:eventId), using findById() and remove() 
     - make update call (api/special/update), get new object from req.body, and use findOneAndUpdate({id: newEvent.id}...)
 
-7. EVENTS CREATED BY SPECIFIC USER
-
+7. VIEW EVENTS CREATED BY SPECIFIC USER
+    - https://stackoverflow.com/questions/48877374/how-to-link-a-collection-with-user
+    - https://mongoosejs.com/docs/2.7.x/docs/populate.html
+    
+    - https://medium.com/@bhanushali.mahesh3/building-a-restful-crud-api-with-node-js-jwt-bcrypt-express-and-mongodb-4e1fb20b7f3d
 
