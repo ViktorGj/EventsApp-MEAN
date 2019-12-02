@@ -146,6 +146,8 @@ ADITIONAL TASKS (improvements)
 7. VIEW EVENTS CREATED BY SPECIFIC USER
     - https://stackoverflow.com/questions/48877374/how-to-link-a-collection-with-user
     - https://mongoosejs.com/docs/2.7.x/docs/populate.html
-    
-    - https://medium.com/@bhanushali.mahesh3/building-a-restful-crud-api-with-node-js-jwt-bcrypt-express-and-mongodb-4e1fb20b7f3d
 
+    - https://medium.com/@bhanushali.mahesh3/building-a-restful-crud-api-with-node-js-jwt-bcrypt-express-and-mongodb-4e1fb20b7f3d
+    - Typescript 3.7 - new features:   https://devblogs.microsoft.com/typescript/announcing-typescript-3-7/#optional-chaining
+    - https://www.youtube.com/watch?v=M9Fs-CCe0Jo
+    - https://www.youtube.com/watch?v=vn3tm0quoqE
